@@ -96,9 +96,7 @@ quest_B2 = question(
     'Install PHP',
     'Install PHP',
     ['Php 7', 'Php 5', 'Skip >>']
-
 )
-
 
 def viewer(title, options):
     """Creates a select list returns the selected option."""
