@@ -8,15 +8,6 @@ import inspect
 # somekey: some_value
 # somekey: other_value
 
-def run_B_questions(a_choice):
-    """Asks the second layer of questions"""
-    if a_choice == "Install all":
-        ask_then_run([quest_B1, quest_B2])
-    if a_choice == "Exit":
-        return "Exit"
-    else:
-        ask_then_run([quest_B2])
-
 def replace_php(option):
     """Fi"""
     if option == 'yes':
@@ -44,7 +35,6 @@ def run_php(option):
         subprocess.call("echo 'shell installs php 7'", shell=True)
     if option == 'Php 5':
         subprocess.call("echo 'shell isntalls php 5'", shell=True)
-
 class question(object):
 
 #object.attribute >> field, method
@@ -54,35 +44,6 @@ class question(object):
         self.name = name
         self.word = word
         self.opti = opti
-
-
-        # self.data = data
-        # self.index = len(data)
-
-
-    # def __iter__(self):
-    #     return self
-
-    # def next(self):
-    #     if self.index == 0:
-    #         raise StopIteration
-    #     self.index = self.index -1
-    #     return self.data[self.index]
-
-    # def __str__(self):
-    #     return ( str(self.func) , str(self.name) )
-
-    # def get_question_func(self):
-    #     return self.name
-
-    #method, function that is assosiated with a class.
-
-quest_A1 = question(
-    run_B_questions,
-    'no_value',
-    'what do you want to do',
-    ['Install all', 'Exit']
-)
 
 quest_B1 = question(
     run_swap,
@@ -98,9 +59,41 @@ quest_B2 = question(
     ['Php 7', 'Php 5', 'Skip >>']
 )
 
+def get_class_instance_values(class_vars):
+    """inputs a list of class variables, outputs the variables attribute values
+       could not get class_var.name as a variable???
+    """
+    instance_values = []
+    for class_var in class_vars:
+        instance_values.extend([class_var.name])
+    return instance_values
+
+manual_input_questions = [quest_B1, quest_B2]
+got_B_questions = get_class_instance_values(manual_input_questions)
+
+
+def run_B_questions(a_choice):
+    """Asks the second layer of questions"""
+    if a_choice == "Install all":
+        ask_then_run(manual_input_questions)
+    else:
+        for manual_input_question, got_B_question in zip(manual_input_questions, got_B_questions):
+            print (manual_input_question, got_B_question)
+            if got_B_question == a_choice:
+                ask_then_run(manual_input_question)
+
+quest_A1 = question(
+    run_B_questions,
+    'no_value',
+    'what do you want to do',
+    ['Install all'] + got_B_questions + ['Exit']
+)
+
+print quest_A1.opti
+
 def viewer(title, options):
     """Creates a select list returns the selected option."""
-    option, something = pick(options, title, indicator='=>', default_index=0)
+    option, not_used = pick(options, title, indicator='=>', default_index=0)
     return option
 
 def find_replace_add(file_current, find_this, replace_that):
@@ -120,6 +113,7 @@ def find_replace_add(file_current, find_this, replace_that):
 
 def ask_then_run(asks):
     """Inputs questions list, asks all then runs """
+#    if isinstance(asks, list):
     got_options = []
     for ask in asks:
         option_out = viewer(ask.word, ask.opti)
@@ -127,80 +121,7 @@ def ask_then_run(asks):
     for got_option in got_options:
         got_option[0](got_option[1])
     return option_out
+ #   else:
+ #       option_out = viewer()
 
 option = ask_then_run([quest_A1]) #runs the first questions
-
-
-
-# D = {}
-
-# D['func'] = ['run_swap']
-# D['name'] = ['Swap memory']
-# D['word'] = ['How much swap/paging space do you need for your instance']
-# D['opti'] = [['512', '1024', '2048', '4096', 'Skip >>']]
-
-# D['func'] += ['run_php']
-# D['name'] += ['Install PHP']
-# D['word'] += ['Install PHP']
-# D['opti'] += [['Php 7', 'Php 5', 'Skip >>']]
-
-# D['func'] += ['replace_php']
-# D['name'] += ['Php.ini file']
-# D['word'] += ['Update the oho.ini file']
-# D['opti'] += [['yes', 'no']]
-
-# D['func'] += ['replace_php']
-# D['name'] += ['Php.ini file']
-# D['word'] += ['Update the oho.ini file']
-# D['opti'] += [['yes', 'no']]
-
-
-# general notes:
-# ==============
-# 1861008840     ID
-# <class'int'>   TYPE(float class, Integer class, String class) Class is like a blueprint
-# 1              VALUE
-
-#Type: float = 9.435 >>This is an object
-#Type: Integer = 5 >>This is an object
-#Type: String = >>"hello world" >>This is also an object
-
-
-
-
-# def run_program():
-#     """Stuff"""
-#     screen_options = ['Install all'] + D['name'] + ['Exit']
-#     screen_option_returned = viewer ("What do you want to do", screen_options)
-
-#     if screen_option_returned == 'Install all':
-#         got_options = []
-#         for name, options_in in zip(D['word'], D['opti']):
-#             option_out = viewer(name, options_in)
-#             got_options.extend([option_out]) #stores the values
-#         for func, got_option in zip(D['func'], got_options):
-#             globals()[func.__name__](got_option) #executes the functions with selected options
-#     else:
-#         ziped_D = zip(D['
-#         ['func'], D['name'], D['word'], D['opti'])
-#         indexed = D['name'].index(screen_option_returned)
-#        def run_B_questions(got_option):
-
-
-#runs the functions option_out = viewer(ziped_D[indexed][2], ziped_D[indexed][3])
-#         func = ziped_D[indexed][0] #gets the function name.
-#         globals()[func](option_out) #turns string - variable.
-
-
-#     screen_options = ['Install all'] + D['name'] + ['Exit']
-#     screen_option_returned = viewer("What do you want to do", screen_options)
-#     if screen_option_returned == 'Install all':
-#         run_all()
-#     else:
-#         run_this()
-
-
-
-
-
- 

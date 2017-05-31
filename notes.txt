@@ -1,0 +1,9 @@
+# general notes:
+# ==============
+# 1861008840     ID
+# <class'int'>   TYPE(float class, Integer class, String class) Class is like a blueprint
+# 1              VALUE
+
+#Type: float = 9.435 >>This is an object
+#Type: Integer = 5 >>This is an object
+#Type: String = >>"hello world" >>This is also an object
